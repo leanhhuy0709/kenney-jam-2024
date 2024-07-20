@@ -35,7 +35,7 @@ public class Car : MonoBehaviour
         Move();
     }
 
-    void Move()
+    public void Move()
     {
         UpdateCurrentVelocity();
         this.transform.position += CurrentVelocity * Time.fixedDeltaTime;

@@ -132,9 +132,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 302452608}
-  - component: {fileID: 302452609}
   - component: {fileID: 302452611}
   - component: {fileID: 302452610}
+  - component: {fileID: 302452612}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -158,23 +158,6 @@ Transform:
   - {fileID: 1853119710}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &302452609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302452607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83841992e5a51d54e8679b3481537f3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 1853119711}
-  MaxSpeed: 0
-  Acceleration: 0
-  CurrentSpeed: 0.5
-  CurrentVelocity: {x: 0, y: 0, z: 0}
 --- !u!61 &302452610
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -247,6 +230,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &302452612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302452607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3febe9accc1baf94e90294bc2d3d5ab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1853119711}
+  MaxSpeed: 5
+  Acceleration: 0.5
+  CurrentSpeed: 0
+  CurrentVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &466597526
 GameObject:
   m_ObjectHideFlags: 0
