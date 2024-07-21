@@ -47,9 +47,14 @@ public class Car : MonoBehaviour
         var otherCar = collision.gameObject.GetComponent<Car>();
         if (otherCar != null)
         {
-            var velocity = otherCar.CurrentVelocity + CurrentVelocity * 0.5f;
+            // var velocity = otherCar.CurrentVelocity + CurrentVelocity * 0.5f;
 
-            otherCar.CurrentSpeed = Vector3.Distance(velocity, Vector3.zero);
+            // otherCar.CurrentSpeed = Vector3.Distance(velocity, Vector3.zero);
+        }
+        else
+        {
+            CurrentSpeed -= MaxSpeed * 0.1f;
+            CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0f, MaxSpeed);
         }
     }
 }
