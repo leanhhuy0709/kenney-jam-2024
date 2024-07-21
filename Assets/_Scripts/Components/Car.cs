@@ -13,6 +13,8 @@ public class Car : MonoBehaviour
     public float CurrentSpeed;
     public Vector3 CurrentVelocity;
 
+    public bool isBack = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,15 @@ public class Car : MonoBehaviour
         var angle = transform.rotation.eulerAngles.z * Mathf.PI / 180f;
         var x = -Mathf.Sin(angle);
         var y = Mathf.Cos(angle);
+
+        if (isBack)
+        {
+            x = -x;
+            y = -y;
+        }
+
+        // if (CurrentVelocity.x * x < 0f) x = -x;
+        // if (CurrentVelocity.y * y < 0f) y = -y;
 
         CurrentVelocity = new Vector3(x, y, 0f) * CurrentSpeed;
     }
@@ -43,7 +54,6 @@ public class Car : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision");
         var otherCar = collision.gameObject.GetComponent<Car>();
         if (otherCar != null)
         {
@@ -53,8 +63,15 @@ public class Car : MonoBehaviour
         }
         else
         {
-            CurrentSpeed -= MaxSpeed * 0.1f;
+            Vector2 normal = collision.contacts[0].normal;
+            CurrentVelocity = Vector3.Reflect(CurrentVelocity, normal);
+
+            CurrentSpeed *= 0.5f;
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0f, MaxSpeed);
+
+            UpdateCurrentVelocity();
         }
+
+
     }
 }
