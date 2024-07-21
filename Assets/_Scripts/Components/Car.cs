@@ -48,12 +48,25 @@ public class Car : MonoBehaviour
 
     public void Move()
     {
+        if (isColliding && (Time.time - collisionStartTime) > 0.5f)
+        {
+            CurrentSpeed = 0;
+            collisionStartTime = Time.time;
+        }
         UpdateCurrentVelocity();
         this.transform.position += CurrentVelocity * Time.fixedDeltaTime;
     }
 
+    private bool isColliding = false;
+    private float collisionStartTime;
+
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!isColliding)
+        {
+            isColliding = true;
+            collisionStartTime = Time.time;
+        }
         var otherCar = collision.gameObject.GetComponent<Car>();
         if (otherCar != null)
         {
@@ -66,12 +79,30 @@ public class Car : MonoBehaviour
             Vector2 normal = collision.contacts[0].normal;
             CurrentVelocity = Vector3.Reflect(CurrentVelocity, normal);
 
-            CurrentSpeed *= 0.5f;
+            CurrentSpeed -= Acceleration * 0.5f * Time.fixedDeltaTime;
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0f, MaxSpeed);
+
+            // Debug.Log(normal);
+
+            // if (Mathf.Abs(normal.x) > Mathf.Abs(normal.y))
+            // {
+            //     CurrentSpeed *= 0.5f;
+            //     isBack = !isBack; // Bound
+            // }
+
+            if (collision.contactCount > 4) CurrentSpeed = 0f;
 
             UpdateCurrentVelocity();
         }
+    }
 
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        isColliding = false;
+    }
 
+    public bool IsColliding()
+    {
+        return isColliding;
     }
 }

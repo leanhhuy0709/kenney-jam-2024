@@ -11,44 +11,92 @@ public class MapManager : MonoBehaviour
     public GameObject RoadTileOne;
     public GameObject RoadTileFork4;
 
+    public GameObject LaneGrass;
+
     private readonly float _sizeX = 3f;
     private readonly float _sizeY = 3f;
+
+    public int[,] Map;
+
+    public bool IsInit;
 
     void Awake()
     {
         if (game == null) Debug.LogWarning("No game in MapManager");
+        Map = new int[20, 20]
+        {
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1},
+            {1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1},
+            {1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1},
+            {1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1},
+            {1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1},
+            {1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1},
+            {1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1},
+            {1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1},
+            {1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+            {1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
+            {1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+            {1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
+            {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+            {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1},
+            {1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1},
+            {1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+        };
+        if (IsInit)
+            InitMap();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        InitMap();
+
+    }
+
+    int GetValue(int x, int y)
+    {
+        var mapWidth = 20;
+        var mapHeight = 20;
+        var isLeft = 0;
+        var isRight = 0;
+        var isUp = 0;
+        var isDown = 0;
+
+        if (x - 1 >= 0 && Map[x - 1, y] != 0) isLeft = 1;
+        if (x + 1 < mapWidth && Map[x + 1, y] != 0) isRight = 1;
+        if (y - 1 >= 0 && Map[x, y - 1] != 0) isDown = 1;
+        if (y + 1 < mapHeight && Map[x, y + 1] != 0) isUp = 1;
+
+        if (Map[x, y] == 0) return 0;
+        var value = isDown + isRight * 2 + isUp * 4 + isLeft * 8;
+        return value;
     }
 
     void InitMap()
     {
-        var map = new int[10, 10]
-        {
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
-            {1, 0, 1, 0, 0, 1, 1, 1, 0, 1},
-            {1, 0, 1, 0, 1, 1, 0, 1, 0, 1},
-            {1, 1, 1, 1, 1, 0, 0, 1, 0, 1},
-            {1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-            {1, 0, 1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-            {1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-        };
-
         // 0 is nothing
         // 1 is curve
         // 2 is straight
         // 3 is fork 3
         // 4 is one
         // 5 is fork 4
-        var mapWidth = 10;
-        var mapHeight = 10;
+        var mapWidth = 20;
+        var mapHeight = 20;
+
+        for (var i = 0; i < mapHeight + 5; i++)
+        {
+            for (var j = 0; j < mapWidth + 5; j++)
+            {
+                var x = j;
+                var y = mapHeight + 5 - 1 - i;
+                var tile = Instantiate(LaneGrass, transform.position, Quaternion.identity);
+                tile.transform.position = new Vector3(_sizeX * (x - (mapHeight + 5) * 0.5f), _sizeY * (y - (mapWidth + 5) * 0.5f), 2f);
+                tile.transform.parent = transform;
+            }
+        }
 
         for (var i = 0; i < mapHeight; i++)
         {
@@ -62,12 +110,12 @@ public class MapManager : MonoBehaviour
                 var x = j;
                 var y = mapHeight - 1 - i;
 
-                if (x - 1 >= 0 && map[x - 1, y] != 0) isLeft = 1;
-                if (x + 1 < mapWidth && map[x + 1, y] != 0) isRight = 1;
-                if (y - 1 >= 0 && map[x, y - 1] != 0) isDown = 1;
-                if (y + 1 < mapHeight && map[x, y + 1] != 0) isUp = 1;
+                if (x - 1 >= 0 && Map[x - 1, y] != 0) isLeft = 1;
+                if (x + 1 < mapWidth && Map[x + 1, y] != 0) isRight = 1;
+                if (y - 1 >= 0 && Map[x, y - 1] != 0) isDown = 1;
+                if (y + 1 < mapHeight && Map[x, y + 1] != 0) isUp = 1;
 
-                if (map[x, y] == 0) continue;
+                if (Map[x, y] == 0) continue;
                 var value = isDown + isRight * 2 + isUp * 4 + isLeft * 8;
 
                 //Left Up Right Down
@@ -139,10 +187,12 @@ public class MapManager : MonoBehaviour
                         tile.transform.rotation = Quaternion.Euler(0, 0, 0);
                         break;
                 }
-                tile.transform.position = new Vector3(_sizeX * x, _sizeY * y, 0f);
+                tile.transform.position = new Vector3(_sizeX * (x - mapHeight * 0.5f), _sizeY * (y - mapWidth * 0.5f), 0f);
                 tile.transform.parent = transform;
             }
         }
+
+
     }
 
     // Update is called once per frame
@@ -150,17 +200,29 @@ public class MapManager : MonoBehaviour
     {
 
     }
-}
 
-/*{
-            {1, 2, 3, 2, 2, 3, 2, 3, 2, 1},
-            {2, 0, 2, 0, 0, 2, 0, 2, 0, 2},
-            {2, 0, 2, 0, 0, 2, 2, 3, 0, 2},
-            {2, 0, 2, 0, 1, 1, 0, 2, 0, 2},
-            {3, 2, 3, 2, 3, 0, 0, 2, 0, 2},
-            {2, 0, 0, 0, 2, 0, 0, 0, 0, 2},
-            {2, 0, 4, 2, 5, 2, 2, 2, 2, 3},
-            {2, 0, 0, 0, 2, 0, 0, 0, 0, 2},
-            {2, 0, 0, 0, 2, 0, 0, 0, 0, 2},
-            {1, 2, 2, 2, 3, 2, 2, 2, 2, 1}
-        };*/
+    public Vector3 GetRandomValidPosition(bool isDiff = false)
+    {
+        var mapWidth = 20;
+        var mapHeight = 20;
+
+        var x = Random.Range(0, 20);
+        var y = Random.Range(0, 20);
+
+        while (Map[x, y] == 0)
+        {
+            x = Random.Range(0, 20);
+            y = Random.Range(0, 20);
+        }
+        if (!isDiff)
+            return new Vector3(_sizeX * (x - mapHeight * 0.5f), _sizeY * (y - mapWidth * 0.5f), 0f);
+
+        var diffX = Random.Range(-0.05f, 0.05f);
+        var diffY = Random.Range(-0.05f, 0.05f);
+
+
+
+        return new Vector3(_sizeX * (x + diffX - mapHeight * 0.5f), _sizeY * (y + diffY - mapWidth * 0.5f), 0f);
+
+    }
+}
